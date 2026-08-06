@@ -23,7 +23,12 @@ export class App {
   protected readonly activeFilter = signal('All classes');
   protected readonly activeNav = signal('Overview');
   protected readonly activeTool = signal('Attendance');
+  protected readonly enrollmentMode = signal<'single' | 'batch'>('single');
+  protected readonly showEnrollment = signal(false);
   protected readonly className = signal('');
+  protected readonly studentFirstName = signal('');
+  protected readonly studentLastName = signal('');
+  protected readonly studentEmail = signal('');
 
   protected readonly teacherTools = [
     { label: 'Attendance', icon: 'check', tone: 'mint' },
@@ -51,6 +56,24 @@ export class App {
   protected setNav(label: string) {
     this.activeNav.set(label);
     this.sidebarOpen.set(false);
+  }
+
+  protected selectTool(label: string) {
+    this.activeTool.set(label);
+    if (label === 'Enroll student') this.openEnrollment();
+  }
+
+  protected openEnrollment() {
+    this.enrollmentMode.set('single');
+    this.showEnrollment.set(true);
+  }
+
+  protected closeEnrollment() {
+    this.showEnrollment.set(false);
+  }
+
+  protected enrollStudent() {
+    if (this.studentFirstName().trim() && this.studentLastName().trim() && this.studentEmail().trim()) this.closeEnrollment();
   }
 
   protected openNewClass() {
