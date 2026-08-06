@@ -25,7 +25,10 @@ export class App {
   protected readonly activeTool = signal('Attendance');
   protected readonly enrollmentMode = signal<'single' | 'batch'>('single');
   protected readonly showEnrollment = signal(false);
+  protected readonly showToolModal = signal(false);
   protected readonly className = signal('');
+  protected readonly workflowValue = signal('');
+  protected readonly workflowMessage = signal('');
   protected readonly studentFirstName = signal('');
   protected readonly studentLastName = signal('');
   protected readonly studentEmail = signal('');
@@ -60,7 +63,21 @@ export class App {
 
   protected selectTool(label: string) {
     this.activeTool.set(label);
-    if (label === 'Enroll student') this.openEnrollment();
+    if (label === 'Enroll student') {
+      this.openEnrollment();
+      return;
+    }
+    this.workflowValue.set('');
+    this.workflowMessage.set('');
+    this.showToolModal.set(true);
+  }
+
+  protected closeToolModal() {
+    this.showToolModal.set(false);
+  }
+
+  protected saveWorkflow() {
+    this.showToolModal.set(false);
   }
 
   protected openEnrollment() {
