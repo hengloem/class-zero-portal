@@ -20,6 +20,10 @@ type ClassItem = {
 export class App {
   protected readonly sidebarOpen = signal(false);
   protected readonly showNewClass = signal(false);
+  protected readonly showNotifications = signal(false);
+  protected readonly showSemesterMenu = signal(false);
+  protected readonly showUserMenu = signal(false);
+  protected readonly currentSemester = signal('Fall semester 2024');
   protected readonly activeFilter = signal('All classes');
   protected readonly activeNav = signal('Overview');
   protected readonly activeTool = signal('Attendance');
@@ -62,6 +66,14 @@ export class App {
   protected setNav(label: string) {
     this.activeNav.set(label);
     this.sidebarOpen.set(false);
+    this.showNotifications.set(false);
+    this.showSemesterMenu.set(false);
+    this.showUserMenu.set(false);
+  }
+
+  protected selectSemester(semester: string) {
+    this.currentSemester.set(semester);
+    this.showSemesterMenu.set(false);
   }
 
   protected selectTool(label: string) {
