@@ -24,6 +24,8 @@ export class App {
   protected readonly showSemesterMenu = signal(false);
   protected readonly showUserMenu = signal(false);
   protected readonly currentSemester = signal('Fall semester 2024');
+  protected readonly currentRole = signal('Admin');
+  protected readonly roles = ['School top management', 'Teacher', 'Student', 'Admin'];
   protected readonly activeFilter = signal('All classes');
   protected readonly activeNav = signal('Overview');
   protected readonly activeTool = signal('Attendance');
@@ -85,6 +87,10 @@ export class App {
   protected selectSemester(semester: string) {
     this.currentSemester.set(semester);
     this.showSemesterMenu.set(false);
+  }
+
+  protected selectRole(role: string) {
+    this.currentRole.set(role);
   }
 
   protected openEventModal() {
