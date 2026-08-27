@@ -39,6 +39,9 @@ export class App {
   protected readonly studentPhone = signal('');
   protected readonly studentTelegram = signal('');
   protected readonly preferredContact = signal('Telegram');
+  protected readonly attendanceSearch = signal('');
+  protected readonly attendanceFilter = signal('All students');
+  protected readonly bulkAttendance = signal('Present');
 
   protected readonly teacherTools = [
     { label: 'Attendance', icon: 'check', tone: 'mint' },
@@ -89,6 +92,19 @@ export class App {
 
   protected closeToolModal() {
     this.showToolModal.set(false);
+  }
+
+  protected attendanceStudents() {
+    const query = this.attendanceSearch().trim().toLowerCase();
+    return this.students.filter((student) => {
+      const matchesSearch = !query || student.name.toLowerCase().includes(query);
+      const matchesFilter = this.attendanceFilter() === 'All students' || student.status === this.attendanceFilter();
+      return matchesSearch && matchesFilter;
+    });
+  }
+
+  protected applyBulkAttendance() {
+    this.students.forEach((student) => student.status = this.bulkAttendance());
   }
 
   protected saveWorkflow() {
