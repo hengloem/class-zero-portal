@@ -32,6 +32,9 @@ export class App {
   protected readonly studentFirstName = signal('');
   protected readonly studentLastName = signal('');
   protected readonly studentEmail = signal('');
+  protected readonly studentPhone = signal('');
+  protected readonly studentTelegram = signal('');
+  protected readonly preferredContact = signal('Telegram');
 
   protected readonly teacherTools = [
     { label: 'Attendance', icon: 'check', tone: 'mint' },
@@ -90,7 +93,8 @@ export class App {
   }
 
   protected enrollStudent() {
-    if (this.studentFirstName().trim() && this.studentLastName().trim() && this.studentEmail().trim()) this.closeEnrollment();
+    const hasContact = this.studentEmail().trim() || this.studentPhone().trim() || this.studentTelegram().trim();
+    if (this.studentFirstName().trim() && this.studentLastName().trim() && hasContact) this.closeEnrollment();
   }
 
   protected openNewClass() {
