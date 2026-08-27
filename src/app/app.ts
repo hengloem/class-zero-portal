@@ -48,6 +48,7 @@ export class App {
   protected readonly eventTime = signal('10:00');
   protected readonly eventType = signal('Lesson');
   protected readonly calendarEvents = signal<{ title: string; date: string; time: string; type: string }[]>([]);
+  protected readonly showWeekends = signal(false);
 
   protected readonly teacherTools = [
     { label: 'Attendance', icon: 'check', tone: 'mint' },
