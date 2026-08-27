@@ -42,6 +42,12 @@ export class App {
   protected readonly attendanceSearch = signal('');
   protected readonly attendanceFilter = signal('All students');
   protected readonly bulkAttendance = signal('Present');
+  protected readonly showEventModal = signal(false);
+  protected readonly eventTitle = signal('');
+  protected readonly eventDate = signal('2024-10-14');
+  protected readonly eventTime = signal('10:00');
+  protected readonly eventType = signal('Lesson');
+  protected readonly calendarEvents = signal<{ title: string; date: string; time: string; type: string }[]>([]);
 
   protected readonly teacherTools = [
     { label: 'Attendance', icon: 'check', tone: 'mint' },
@@ -77,6 +83,29 @@ export class App {
   protected selectSemester(semester: string) {
     this.currentSemester.set(semester);
     this.showSemesterMenu.set(false);
+  }
+
+  protected openEventModal() {
+    this.eventTitle.set('');
+    this.eventDate.set('2024-10-14');
+    this.eventTime.set('10:00');
+    this.eventType.set('Lesson');
+    this.showEventModal.set(true);
+  }
+
+  protected closeEventModal() {
+    this.showEventModal.set(false);
+  }
+
+  protected addEvent() {
+    if (!this.eventTitle().trim()) return;
+    this.calendarEvents.update((events) => [...events, {
+      title: this.eventTitle().trim(),
+      date: this.eventDate(),
+      time: this.eventTime(),
+      type: this.eventType()
+    }]);
+    this.closeEventModal();
   }
 
   protected selectTool(label: string) {
