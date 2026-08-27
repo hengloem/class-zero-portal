@@ -42,6 +42,7 @@ export class App {
   protected readonly attendanceSearch = signal('');
   protected readonly attendanceFilter = signal('All students');
   protected readonly bulkAttendance = signal('Present');
+  protected readonly speakingStudent = signal('');
   protected readonly showEventModal = signal(false);
   protected readonly eventTitle = signal('');
   protected readonly eventDate = signal('2024-10-14');
@@ -135,6 +136,17 @@ export class App {
 
   protected applyBulkAttendance() {
     this.students.forEach((student) => student.status = this.bulkAttendance());
+  }
+
+  protected speakStudentName(name: string) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(name);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    this.speakingStudent.set(name);
+    utterance.onend = () => this.speakingStudent.set('');
+    window.speechSynthesis.speak(utterance);
   }
 
   protected saveWorkflow() {
