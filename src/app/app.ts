@@ -97,6 +97,15 @@ export class App {
     if (this.studentFirstName().trim() && this.studentLastName().trim() && hasContact) this.closeEnrollment();
   }
 
+  protected downloadTemplate() {
+    const csv = 'first_name,last_name,email,phone,telegram,class,parent_contact\nMaya,Chen,,+85512345678,@mayachen,Product Design Studio,+85598765432';
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    link.download = 'class0-student-roster-template.csv';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
   protected openNewClass() {
     this.className.set('');
     this.showNewClass.set(true);
