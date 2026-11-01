@@ -26,6 +26,13 @@ export class App {
   protected readonly currentSemester = signal('Fall semester 2024');
   protected readonly currentRole = signal('Admin');
   protected readonly roles = ['School top management', 'Teacher', 'Student', 'Admin'];
+  protected readonly isSignedIn = signal(false);
+  protected readonly demoAccounts = [
+    { role: 'School top management', email: 'principal@classzero.demo' },
+    { role: 'Teacher', email: 'teacher@classzero.demo' },
+    { role: 'Student', email: 'student@classzero.demo' },
+    { role: 'Admin', email: 'admin@classzero.demo' }
+  ];
   protected readonly activeFilter = signal('All classes');
   protected readonly activeNav = signal('Overview');
   protected readonly activeTool = signal('Attendance');
@@ -91,6 +98,17 @@ export class App {
 
   protected selectRole(role: string) {
     this.currentRole.set(role);
+  }
+
+  protected signIn(role: string) {
+    this.currentRole.set(role);
+    this.isSignedIn.set(true);
+  }
+
+  protected signOut() {
+    this.isSignedIn.set(false);
+    this.showUserMenu.set(false);
+    this.sidebarOpen.set(false);
   }
 
   protected openEventModal() {
