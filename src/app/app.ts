@@ -1,6 +1,9 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+type AppUser = { id: number; name: string; email: string; role: string };
+type UserDraft = { name: string; email: string; role: string };
+
 type ClassItem = {
   title: string;
   subject: string;
@@ -37,11 +40,17 @@ export class App {
     () => this.demoAccounts.find((account) => account.role === this.currentRole()) ?? this.demoAccounts[0]
   );
   protected readonly firstName = computed(() => this.currentAccount().name.split(' ')[0]);
+  protected readonly users = signal<AppUser[]>(
+    this.demoAccounts.map((account, index) => ({ id: index + 1, name: account.name, email: account.email, role: account.role }))
+  );
+  protected readonly userFormOpen = signal(false);
+  protected readonly editingUserId = signal<number | null>(null);
+  protected readonly userDraft = signal<UserDraft>({ name: '', email: '', role: 'Student' });
   protected readonly moduleAccess: Record<string, string[]> = {
-    'School top management': ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings'],
+    'School top management': ['Overview', 'Calendar', 'Students', 'Insights', 'Settings'],
     Teacher: ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings'],
     Student: ['Overview', 'My classes', 'Calendar', 'Settings'],
-    Admin: ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings']
+    Admin: ['Overview', 'My classes', 'Calendar', 'Students', 'Users', 'Insights', 'Settings']
   };
   protected readonly workspaceModules = [
     { label: 'Overview', icon: 'grid' },
@@ -129,6 +138,62 @@ export class App {
     this.currentRole.set(role);
     this.activeNav.set('Overview');
     this.isSignedIn.set(true);
+  }
+
+  protected readonly showForgotPassword = signal(false);
+  protected readonly resetEmail = signal('');
+  protected readonly resetRequested = signal('');
+
+  protected toggleForgotPassword() {
+    this.showForgotPassword.update((open) => !open);
+    this.resetRequested.set('');
+  }
+
+  protected requestPasswordReset() {
+    const email = this.resetEmail().trim();
+    if (!email) return;
+    this.resetRequested.set(email);
+    this.resetEmail.set('');
+  }
+
+  protected openNewUser() {
+    this.editingUserId.set(null);
+    this.userDraft.set({ name: '', email: '', role: 'Student' });
+    this.userFormOpen.set(true);
+  }
+
+  protected editUser(user: AppUser) {
+    this.editingUserId.set(user.id);
+    this.userDraft.set({ name: user.name, email: user.email, role: user.role });
+    this.userFormOpen.set(true);
+  }
+
+  protected updateDraft(field: keyof UserDraft, value: string) {
+    this.userDraft.update((draft) => ({ ...draft, [field]: value }));
+  }
+
+  protected closeUserForm() {
+    this.userFormOpen.set(false);
+  }
+
+  protected saveUser() {
+    const draft = this.userDraft();
+    const name = draft.name.trim();
+    const email = draft.email.trim();
+    if (!name || !email) return;
+    const id = this.editingUserId();
+    if (id === null) {
+      this.users.update((list) => [...list, { id: Math.max(0, ...list.map((user) => user.id)) + 1, name, email, role: draft.role }]);
+    } else {
+      this.users.update((list) => list.map((user) => (user.id === id ? { ...user, name, email, role: draft.role } : user)));
+    }
+    this.userFormOpen.set(false);
+  }
+
+  protected deleteUser(user: AppUser) {
+    if (user.email === this.currentAccount().email) return;
+    this.users.update((list) => list.filter((item) => item.id !== user.id));
+    if (this.editingUserId() === user.id) this.userFormOpen.set(false);
   }
 
   protected signOut() {
