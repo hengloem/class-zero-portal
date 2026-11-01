@@ -28,11 +28,15 @@ export class App {
   protected readonly roles = ['School top management', 'Teacher', 'Student', 'Admin'];
   protected readonly isSignedIn = signal(false);
   protected readonly demoAccounts = [
-    { role: 'School top management', email: 'principal@classzero.demo' },
-    { role: 'Teacher', email: 'teacher@classzero.demo' },
-    { role: 'Student', email: 'student@classzero.demo' },
-    { role: 'Admin', email: 'admin@classzero.demo' }
+    { role: 'School top management', name: 'Sophea Chan', initials: 'SC', email: 'principal@classzero.demo' },
+    { role: 'Teacher', name: 'Vannak Lim', initials: 'VL', email: 'teacher@classzero.demo' },
+    { role: 'Student', name: 'Srey Pov', initials: 'SP', email: 'student@classzero.demo' },
+    { role: 'Admin', name: 'Ratha Kim', initials: 'RK', email: 'admin@classzero.demo' }
   ];
+  protected readonly currentAccount = computed(
+    () => this.demoAccounts.find((account) => account.role === this.currentRole()) ?? this.demoAccounts[0]
+  );
+  protected readonly firstName = computed(() => this.currentAccount().name.split(' ')[0]);
   protected readonly moduleAccess: Record<string, string[]> = {
     'School top management': ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings'],
     Teacher: ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings'],
