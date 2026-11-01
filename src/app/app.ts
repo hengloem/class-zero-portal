@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 type ClassItem = {
@@ -33,6 +33,22 @@ export class App {
     { role: 'Student', email: 'student@classzero.demo' },
     { role: 'Admin', email: 'admin@classzero.demo' }
   ];
+  protected readonly moduleAccess: Record<string, string[]> = {
+    'School top management': ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings'],
+    Teacher: ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings'],
+    Student: ['Overview', 'My classes', 'Calendar', 'Settings'],
+    Admin: ['Overview', 'My classes', 'Calendar', 'Students', 'Insights', 'Settings']
+  };
+  protected readonly workspaceModules = [
+    { label: 'Overview', icon: 'grid' },
+    { label: 'My classes', icon: 'book' },
+    { label: 'Calendar', icon: 'calendar' },
+    { label: 'Students', icon: 'users' }
+  ];
+  protected readonly visibleWorkspaceModules = computed(() =>
+    this.workspaceModules.filter((module) => this.canAccess(module.label))
+  );
+  protected readonly canUseTeacherTools = computed(() => ['Teacher', 'Admin'].includes(this.currentRole()));
   protected readonly activeFilter = signal('All classes');
   protected readonly activeNav = signal('Overview');
   protected readonly activeTool = signal('Attendance');
@@ -96,12 +112,18 @@ export class App {
     this.showSemesterMenu.set(false);
   }
 
+  protected canAccess(module: string) {
+    return this.moduleAccess[this.currentRole()]?.includes(module) ?? false;
+  }
+
   protected selectRole(role: string) {
     this.currentRole.set(role);
+    if (!this.canAccess(this.activeNav())) this.activeNav.set('Overview');
   }
 
   protected signIn(role: string) {
     this.currentRole.set(role);
+    this.activeNav.set('Overview');
     this.isSignedIn.set(true);
   }
 
