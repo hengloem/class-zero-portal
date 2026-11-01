@@ -4,7 +4,7 @@ Class Zero is a simple, modern class-management portal for teachers and school a
 
 ## Features
 
-- Overview dashboard for classes, students, assignments, and teaching hours
+- Overview dashboard with stats, teacher tools, student pulse, classes, and today's schedule
 - Class management with active course cards
 - Calendar with event creation and an optional weekend view (Monday to Friday by default)
 - Student directory with search and class filtering
@@ -21,6 +21,18 @@ Class Zero is a simple, modern class-management portal for teachers and school a
 - Insights and workspace settings pages
 - Role selector in Settings: School top management, Teacher, Student, Admin
 - Responsive sticky sidebar with mobile navigation
+
+## Overview dashboard
+
+The Overview page is the default view after opening the portal. It contains:
+
+- **Stats cards:** active classes, total students with attendance rate, assignments with items due this week, and hours taught.
+- **Teacher tools:** eight quick actions (such as attendance, score grading, exam creation, leave review, notes, alerts, and parent contact) that open a workflow dialog.
+- **Student pulse:** a table of students with class, attendance, and latest score, plus a link to the full student directory.
+- **Your classes:** course cards with Active, Archived, and All filters, and an "Add another class" action.
+- **Coming up:** today's schedule with the next lesson's start time.
+
+Use **New class** in the page header or the class card area to create a class.
 
 ## Roles
 
