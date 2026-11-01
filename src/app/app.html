@@ -130,25 +130,34 @@
 
 </div>
 } @else {
-<div class="grid min-h-screen place-items-center bg-paper px-5 py-10 text-ink">
-  <div class="w-full max-w-md rounded-2xl border border-line bg-white p-7 shadow-soft sm:p-9">
+<div class="relative grid min-h-screen place-items-center overflow-hidden bg-paper px-5 py-10 text-ink">
+  <div class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-mint/50 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-coral/30 blur-3xl"></div>
+  <div class="relative w-full max-w-md rounded-3xl border border-line bg-white/90 p-7 shadow-soft backdrop-blur sm:p-9">
     <div class="flex items-center gap-3">
-      <div class="grid h-10 w-10 place-items-center rounded-xl bg-coral text-sm font-bold text-ink">C0</div>
+      <div class="grid h-11 w-11 place-items-center rounded-xl bg-coral text-sm font-bold text-ink">C0</div>
       <span class="font-display text-2xl font-semibold tracking-tight">Class Zero<span class="text-coral">.</span></span>
     </div>
-    <h1 class="mt-8 font-display text-3xl font-semibold">Sign in</h1>
-    <p class="mt-2 text-sm text-muted">Choose a demo account to continue. Real sign-in will replace this once Supabase is connected.</p>
+    <p class="mt-8 text-[10px] font-bold uppercase tracking-[0.2em] text-coral">Demo access</p>
+    <h1 class="mt-2 font-display text-4xl font-semibold tracking-[-0.03em]">Sign in</h1>
+    <p class="mt-2 text-sm leading-relaxed text-muted">Choose a demo account to explore the portal. Real sign-in will replace this once Supabase is connected.</p>
     <div class="mt-7 space-y-3">
       @for (account of demoAccounts; track account.role) {
-        <button type="button" (click)="signIn(account.role)" class="flex w-full items-center justify-between rounded-xl border border-line px-4 py-3.5 text-left transition-colors hover:border-coral hover:bg-coral/5">
-          <span>
+        <button type="button" (click)="signIn(account.role)" class="group flex w-full items-center gap-4 rounded-2xl border border-line bg-white px-4 py-3.5 text-left transition-all hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-soft">
+          <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xs font-bold text-ink"
+            [class.bg-coral]="account.role === 'Admin'"
+            [class.bg-mint]="account.role === 'Teacher'"
+            [class.bg-lavender]="account.role === 'Student'"
+            [class.bg-yellow-100]="account.role === 'School top management'">{{ account.role.charAt(0) }}</span>
+          <span class="min-w-0 flex-1">
             <span class="block text-sm font-bold">{{ account.role }}</span>
-            <span class="mt-0.5 block text-[11px] text-muted">{{ account.email }}</span>
+            <span class="mt-0.5 block truncate text-[11px] text-muted">{{ account.email }}</span>
           </span>
-          <span class="text-coral">→</span>
+          <span class="text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-coral">→</span>
         </button>
       }
     </div>
+    <p class="mt-7 border-t border-line pt-5 text-[11px] text-muted">Demo only. No real accounts or data are protected on this screen.</p>
   </div>
 </div>
 }
